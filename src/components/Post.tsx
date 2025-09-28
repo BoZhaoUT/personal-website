@@ -33,10 +33,11 @@ export interface PostData {
   }
   content: {
     text?: string
-    image?: string
+    images?: string[]
     video?: string
   }
   timestamp: string
+  location?: string
   likes: number
   comments: number
   shares: number
@@ -100,251 +101,146 @@ export default function Post({
     )
 
     if (diffInHours < 1) return "Just now"
-    if (diffInHours < 24) return `${diffInHours}h`
+    if (diffInHours < 24) return `${diffInHours} hours ago`
     const diffInDays = Math.floor(diffInHours / 24)
-    if (diffInDays < 7) return `${diffInDays}d`
+    if (diffInDays === 1) return "yesterday"
+    if (diffInDays < 7) return `${diffInDays} days ago`
     return date.toLocaleDateString()
   }
 
-  const isCompact = variant === "compact"
-
   return (
-    <Card
-      elevation={isCompact ? 1 : 2}
-      sx={{
-        mb: isCompact ? 1 : 2,
-        borderRadius: isCompact ? 1 : 2,
-        "&:hover": {
-          boxShadow: isCompact ? 2 : 4,
-        },
-        transition: "box-shadow 0.2s ease-in-out",
-      }}
-    >
-      {/* Header */}
-      <CardHeader
-        avatar={
+    <div style={{ borderBottom: "1px solid #e0e0e0" }}>
+      <Box sx={{ display: "flex", p: 2 }}>
+        {/* Left Side - Avatar */}
+        <Box sx={{ mr: 2, flexShrink: 0 }}>
           <Avatar
             src={post.author.avatar}
             alt={post.author.name}
-            sx={{ cursor: "pointer" }}
+            sx={{
+              cursor: "pointer",
+              width: 48,
+              height: 48,
+              borderRadius: "4px",
+            }}
             onClick={() => onAuthorClick?.(post.author.username)}
           />
-        }
-        action={
-          <IconButton aria-label="more" onClick={handleMenuClick} size="small">
-            <MoreIcon />
-          </IconButton>
-        }
-        title={
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+        </Box>
+
+        {/* Right Side - Content */}
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          {/* Text Content */}
+          {post.content.text && (
             <Typography
-              variant={isCompact ? "subtitle2" : "subtitle1"}
-              component="span"
-              sx={{ fontWeight: 600, cursor: "pointer" }}
-              onClick={() => onAuthorClick?.(post.author.username)}
+              variant="body2"
+              sx={{
+                mb: post.content.images || post.content.video ? 2 : 1,
+                whiteSpace: "pre-wrap",
+                wordBreak: "break-word",
+                textAlign: "left",
+              }}
             >
-              {post.author.name}
+              {post.content.text}
             </Typography>
-            {post.author.verified && (
-              <Chip
-                label="✓"
-                size="small"
-                color="primary"
-                sx={{ height: 16, fontSize: "0.7rem" }}
-              />
-            )}
-          </Box>
-        }
-        subheader={
-          <Typography variant="caption" color="text.secondary">
-            @{post.author.username} • {formatTimestamp(post.timestamp)}
-          </Typography>
-        }
-        sx={{
-          pb: isCompact ? 1 : 2,
-          "& .MuiCardHeader-content": {
-            minWidth: 0,
-          },
-        }}
-      />
+          )}
 
-      {/* More Menu */}
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleMenuClose}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
-        <MenuItem onClick={handleMenuClose}>Report</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Hide post</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Copy link</MenuItem>
-      </Menu>
+          {/* Media Content */}
+          {(post.content.images?.length || post.content.video) && (
+            <Box sx={{ mb: 2 }}>
+              {/* Video - Full Width */}
+              {post.content.video && (
+                <video
+                  src={post.content.video}
+                  controls
+                  style={{
+                    width: "60%",
+                    height: "230px",
+                    display: "block",
+                  }}
+                />
+              )}
 
-      {/* Content */}
-      <CardContent sx={{ pt: 0, pb: isCompact ? 1 : 2 }}>
-        {post.content.text && (
-          <Typography
-            variant={isCompact ? "body2" : "body1"}
-            sx={{
-              mb: post.content.image || post.content.video ? 2 : 0,
-              whiteSpace: "pre-wrap",
-              wordBreak: "break-word",
-            }}
-          >
-            {post.content.text}
-          </Typography>
-        )}
-
-        {/* Media */}
-        {(post.content.image || post.content.video) && (
-          <Box
-            sx={{
-              borderRadius: 2,
-              overflow: "hidden",
-              mb: 2,
-            }}
-          >
-            {post.content.image && (
-              <img
-                src={post.content.image}
-                alt="Post content"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  display: "block",
-                }}
-              />
-            )}
-            {post.content.video && (
-              <video
-                src={post.content.video}
-                controls
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  display: "block",
-                }}
-              />
-            )}
-          </Box>
-        )}
-
-        {/* Tags */}
-        {post.tags && post.tags.length > 0 && (
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mb: 1 }}>
-            {post.tags.map((tag, index) => (
-              <Chip
-                key={index}
-                label={`#${tag}`}
-                size="small"
-                variant="outlined"
-                sx={{ fontSize: "0.75rem" }}
-              />
-            ))}
-          </Box>
-        )}
-      </CardContent>
-
-      {/* Actions */}
-      {showActions && (
-        <>
-          <Divider />
-          <CardActions sx={{ justifyContent: "space-between", px: 2, py: 1 }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Button
-                startIcon={<LikeIcon />}
-                onClick={handleLike}
-                color={isLiked ? "primary" : "inherit"}
-                size="small"
-                sx={{ minWidth: "auto", px: 1 }}
-              >
-                {likeCount > 0 && likeCount}
-              </Button>
-              <Button
-                startIcon={<CommentIcon />}
-                onClick={() => onComment?.(post.id)}
-                size="small"
-                sx={{ minWidth: "auto", px: 1 }}
-              >
-                {post.comments > 0 && post.comments}
-              </Button>
-              <Button
-                startIcon={<ShareIcon />}
-                onClick={() => onShare?.(post.id)}
-                size="small"
-                sx={{ minWidth: "auto", px: 1 }}
-              >
-                {post.shares > 0 && post.shares}
-              </Button>
+              {/* Images - Grid Layout */}
+              {post.content.images && post.content.images.length > 0 && (
+                <Box
+                  sx={{
+                    display: "grid",
+                    gap: 0.5,
+                    gridTemplateColumns: (() => {
+                      const imageCount = post.content.images!.length
+                      if (imageCount === 1) return "1fr"
+                      if (imageCount === 2) return "30% 30%"
+                      if (imageCount === 3) return "repeat(3, 1fr)"
+                      if (imageCount === 4) return "repeat(1, 30% 30%)"
+                      if (imageCount === 5) return "repeat(3, 1fr)"
+                      if (imageCount === 6) return "repeat(3, 1fr)"
+                      if (imageCount === 7) return "repeat(3, 1fr)"
+                      if (imageCount === 8) return "repeat(3, 1fr)"
+                      if (imageCount === 9) return "repeat(3, 1fr)"
+                      return "repeat(3, 1fr)"
+                    })(),
+                    maxWidth: "100%",
+                  }}
+                >
+                  {post.content.images.map((image, index) => (
+                    <img
+                      key={index}
+                      src={image}
+                      alt={`Post content ${index + 1}`}
+                      style={{
+                        width: "100%",
+                        height: "120px",
+                        objectFit: "cover",
+                        aspectRatio: "1",
+                      }}
+                    />
+                  ))}
+                </Box>
+              )}
             </Box>
-            <IconButton onClick={handleSave} size="small">
-              {isSaved ? <SaveIcon /> : <SaveBorderIcon />}
-            </IconButton>
-          </CardActions>
-        </>
-      )}
-    </Card>
+          )}
+
+          {/* Location */}
+          {post.location && (
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{
+                mb: 0.5,
+                display: "block",
+                textAlign: "left",
+              }}
+            >
+              {post.location}
+            </Typography>
+          )}
+
+          {/* Time */}
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{
+              mb: 1,
+              display: "block",
+              textAlign: "left",
+            }}
+          >
+            {formatTimestamp(post.timestamp)}
+          </Typography>
+
+          {/* Actions */}
+          {/* <Box sx={{ display: "flex", gap: 2 }}>
+            <Button
+              startIcon={<LikeIcon />}
+              onClick={handleLike}
+              color={isLiked ? "primary" : "inherit"}
+              size="small"
+              sx={{ minWidth: "auto", px: 1 }}
+            >
+              Like
+            </Button>
+          </Box> */}
+        </Box>
+      </Box>
+    </div>
   )
 }
-
-// Sample data for testing
-export const samplePosts: PostData[] = [
-  {
-    id: "1",
-    author: {
-      name: "John Doe",
-      username: "johndoe",
-      avatar: "https://i.pravatar.cc/150?img=1",
-      verified: true,
-    },
-    content: {
-      text: "Just finished building this awesome React component! 🚀 The Material UI integration is looking great. What do you think?",
-    },
-    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
-    likes: 42,
-    comments: 8,
-    shares: 3,
-    isLiked: false,
-    isSaved: false,
-    tags: ["react", "materialui", "frontend"],
-  },
-  {
-    id: "2",
-    author: {
-      name: "Jane Smith",
-      username: "janesmith",
-      avatar: "https://i.pravatar.cc/150?img=2",
-    },
-    content: {
-      text: "Beautiful sunset from my balcony today! 🌅",
-      image: "https://picsum.photos/600/400?random=1",
-    },
-    timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(), // 5 hours ago
-    likes: 128,
-    comments: 23,
-    shares: 15,
-    isLiked: true,
-    isSaved: true,
-    tags: ["photography", "nature"],
-  },
-  {
-    id: "3",
-    author: {
-      name: "Tech Updates",
-      username: "techupdates",
-      avatar: "https://i.pravatar.cc/150?img=3",
-      verified: true,
-    },
-    content: {
-      text: "New JavaScript features coming in ES2024! Exciting times for developers.",
-    },
-    timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
-    likes: 89,
-    comments: 12,
-    shares: 7,
-    isLiked: false,
-    isSaved: false,
-    tags: ["javascript", "webdev", "programming"],
-  },
-]

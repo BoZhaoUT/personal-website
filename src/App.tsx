@@ -15,7 +15,8 @@ import BottomNavigation, {
   UserIcon,
   SettingsIcon,
 } from "./components/BottomNavigation"
-import Post, { samplePosts, PostData } from "./components/Post"
+import Post, { type PostData } from "./components/Post"
+import { samplePosts } from "./data/samplePosts"
 
 // Create Material UI theme
 const theme = createTheme({
