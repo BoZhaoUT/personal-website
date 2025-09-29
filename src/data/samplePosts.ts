@@ -61,8 +61,6 @@ export const samplePosts: PostData[] = [
     },
     content: {
       text: "Fresh dishes available today! Call for orders 📞",
-      video:
-        "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4",
     },
     timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
     likes: 89,

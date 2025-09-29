@@ -91,93 +91,105 @@ function App() {
         {/* Main content area */}
         <div className="flex-1 pb-20">
           {currentPage === "home" && (
-            <Container maxWidth="sm" sx={{ py: 2 }}>
-              <Typography
-                variant="h4"
-                component="h1"
-                gutterBottom
-                align="center"
-              >
-                Home Feed
-              </Typography>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <Box sx={{ py: 2 }}>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
                 {posts.map((post) => (
                   <Post
                     key={post.id}
                     post={post}
-                    onLike={handleLike}
-                    onComment={handleComment}
-                    onShare={handleShare}
-                    onSave={handleSave}
                     onAuthorClick={handleAuthorClick}
                   />
                 ))}
               </Box>
-            </Container>
+            </Box>
           )}
 
           {currentPage === "search" && (
-            <Container maxWidth="sm" sx={{ py: 2 }}>
+            <Box sx={{ py: 2 }}>
               <Typography
                 variant="h4"
                 component="h1"
                 gutterBottom
                 align="center"
+                sx={{ px: 2 }}
               >
                 Search
               </Typography>
-              <Typography variant="body1" color="text.secondary" align="center">
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                align="center"
+                sx={{ px: 2 }}
+              >
                 Search functionality coming soon...
               </Typography>
-            </Container>
+            </Box>
           )}
 
           {currentPage === "favorites" && (
-            <Container maxWidth="sm" sx={{ py: 2 }}>
+            <Box sx={{ py: 2 }}>
               <Typography
                 variant="h4"
                 component="h1"
                 gutterBottom
                 align="center"
+                sx={{ px: 2 }}
               >
                 Favorites
               </Typography>
-              <Typography variant="body1" color="text.secondary" align="center">
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                align="center"
+                sx={{ px: 2 }}
+              >
                 Your saved posts will appear here...
               </Typography>
-            </Container>
+            </Box>
           )}
 
           {currentPage === "profile" && (
-            <Container maxWidth="sm" sx={{ py: 2 }}>
+            <Box sx={{ py: 2 }}>
               <Typography
                 variant="h4"
                 component="h1"
                 gutterBottom
                 align="center"
+                sx={{ px: 2 }}
               >
                 Profile
               </Typography>
-              <Typography variant="body1" color="text.secondary" align="center">
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                align="center"
+                sx={{ px: 2 }}
+              >
                 Profile page coming soon...
               </Typography>
-            </Container>
+            </Box>
           )}
 
           {currentPage === "settings" && (
-            <Container maxWidth="sm" sx={{ py: 2 }}>
+            <Box sx={{ py: 2 }}>
               <Typography
                 variant="h4"
                 component="h1"
                 gutterBottom
                 align="center"
+                sx={{ px: 2 }}
               >
                 Settings
               </Typography>
-              <Typography variant="body1" color="text.secondary" align="center">
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                align="center"
+                sx={{ px: 2 }}
+              >
                 Settings page coming soon...
               </Typography>
-            </Container>
+            </Box>
           )}
         </div>
 

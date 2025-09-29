@@ -1,27 +1,4 @@
-import { useState } from "react"
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Avatar,
-  Typography,
-  IconButton,
-  Box,
-  Chip,
-  Menu,
-  MenuItem,
-  Divider,
-  Button,
-} from "@mui/material"
-import {
-  MoreVert as MoreIcon,
-  ThumbUp as LikeIcon,
-  ChatBubble as CommentIcon,
-  Share as ShareIcon,
-  Bookmark as SaveIcon,
-  BookmarkBorder as SaveBorderIcon,
-} from "@mui/icons-material"
+import { Avatar, Typography, Box } from "@mui/material"
 
 export interface PostData {
   id: string
@@ -48,51 +25,10 @@ export interface PostData {
 
 interface PostProps {
   post: PostData
-  onLike?: (postId: string) => void
-  onComment?: (postId: string) => void
-  onShare?: (postId: string) => void
-  onSave?: (postId: string) => void
   onAuthorClick?: (authorId: string) => void
-  variant?: "default" | "compact"
-  showActions?: boolean
 }
 
-export default function Post({
-  post,
-  onLike,
-  onComment,
-  onShare,
-  onSave,
-  onAuthorClick,
-  variant = "default",
-  showActions = true,
-}: PostProps) {
-  const [isLiked, setIsLiked] = useState(post.isLiked || false)
-  const [isSaved, setIsSaved] = useState(post.isSaved || false)
-  const [likeCount, setLikeCount] = useState(post.likes)
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
-
-  const handleLike = () => {
-    const newLikedState = !isLiked
-    setIsLiked(newLikedState)
-    setLikeCount((prev) => (newLikedState ? prev + 1 : prev - 1))
-    onLike?.(post.id)
-  }
-
-  const handleSave = () => {
-    setIsSaved(!isSaved)
-    onSave?.(post.id)
-  }
-
-  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleMenuClose = () => {
-    setAnchorEl(null)
-  }
-
+const Post = ({ post, onAuthorClick }: PostProps) => {
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp)
     const now = new Date()
@@ -130,17 +66,30 @@ export default function Post({
         <Box sx={{ flex: 1, minWidth: 0 }}>
           {/* Text Content */}
           {post.content.text && (
-            <Typography
-              variant="body2"
-              sx={{
-                mb: post.content.images || post.content.video ? 2 : 1,
-                whiteSpace: "pre-wrap",
-                wordBreak: "break-word",
-                textAlign: "left",
-              }}
-            >
-              {post.content.text}
-            </Typography>
+            <Box>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  fontWeight: 600,
+                  mb: 0.5,
+                  textAlign: "left",
+                  color: "#6B8DB8",
+                }}
+              >
+                Post Content
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  mb: post.content.images || post.content.video ? 2 : 1,
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-word",
+                  textAlign: "left",
+                }}
+              >
+                {post.content.text}
+              </Typography>
+            </Box>
           )}
 
           {/* Media Content */}
@@ -188,9 +137,8 @@ export default function Post({
                       alt={`Post content ${index + 1}`}
                       style={{
                         width: "100%",
-                        height: "120px",
-                        objectFit: "cover",
                         aspectRatio: "1",
+                        objectFit: "cover",
                       }}
                     />
                   ))}
@@ -226,21 +174,10 @@ export default function Post({
           >
             {formatTimestamp(post.timestamp)}
           </Typography>
-
-          {/* Actions */}
-          {/* <Box sx={{ display: "flex", gap: 2 }}>
-            <Button
-              startIcon={<LikeIcon />}
-              onClick={handleLike}
-              color={isLiked ? "primary" : "inherit"}
-              size="small"
-              sx={{ minWidth: "auto", px: 1 }}
-            >
-              Like
-            </Button>
-          </Box> */}
         </Box>
       </Box>
     </div>
   )
 }
+
+export default Post
