@@ -16,6 +16,7 @@ import BottomNavigation, {
   SettingsIcon,
 } from "./components/BottomNavigation"
 import Post, { type PostData } from "./components/Post"
+import ActivityProfile from "./components/ActivityProfile"
 import { samplePosts } from "./data/samplePosts"
 
 // Create Material UI theme
@@ -30,6 +31,10 @@ const theme = createTheme({
 function App() {
   const [currentPage, setCurrentPage] = useState("home")
   const [posts] = useState<PostData[]>(samplePosts)
+  const [activityProfileOpen, setActivityProfileOpen] = useState(false)
+  const [selectedAuthor, setSelectedAuthor] = useState<
+    PostData["author"] | null
+  >(null)
 
   const navigationItems = [
     {
@@ -81,7 +86,18 @@ function App() {
   }
 
   const handleAuthorClick = (username: string) => {
-    console.log("View profile:", username)
+    const author = posts.find(
+      (post) => post.author.username === username
+    )?.author
+    if (author) {
+      setSelectedAuthor(author)
+      setActivityProfileOpen(true)
+    }
+  }
+
+  const handleCloseActivityProfile = () => {
+    setActivityProfileOpen(false)
+    setSelectedAuthor(null)
   }
 
   return (
@@ -195,6 +211,15 @@ function App() {
 
         {/* Sticky Bottom Navigation */}
         <BottomNavigation items={navigationItems} defaultSelected="home" />
+
+        {/* Activity Profile Modal */}
+        {selectedAuthor && (
+          <ActivityProfile
+            open={activityProfileOpen}
+            onClose={handleCloseActivityProfile}
+            author={selectedAuthor}
+          />
+        )}
       </div>
     </ThemeProvider>
   )
