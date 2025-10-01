@@ -4,8 +4,8 @@ export const samplePosts: PostData[] = [
   {
     id: "1",
     author: {
-      name: "Alex Chen",
-      username: "traveler_alex",
+      name: "Hobbyist",
+      username: "hobbyist",
       avatar: "https://i.pravatar.cc/150?img=1",
       verified: true,
     },
@@ -24,8 +24,8 @@ export const samplePosts: PostData[] = [
   {
     id: "2",
     author: {
-      name: "Sarah Johnson",
-      username: "traveler_sarah",
+      name: "Traveler",
+      username: "traveler",
       avatar: "https://i.pravatar.cc/150?img=2",
       verified: true,
     },
@@ -55,8 +55,8 @@ export const samplePosts: PostData[] = [
   {
     id: "3",
     author: {
-      name: "Marcus Rodriguez",
-      username: "foodie_marcus",
+      name: "Foodie",
+      username: "foodie",
       avatar: "https://i.pravatar.cc/150?img=3",
       verified: true,
     },
@@ -75,8 +75,8 @@ export const samplePosts: PostData[] = [
   {
     id: "4",
     author: {
-      name: "Emma Wilson",
-      username: "hobby_emma",
+      name: "Hobbyist",
+      username: "hobbyist",
       avatar: "https://i.pravatar.cc/150?img=4",
     },
     content: {
@@ -98,8 +98,8 @@ export const samplePosts: PostData[] = [
   {
     id: "5",
     author: {
-      name: "David Kim",
-      username: "foodie_david",
+      name: "Foodie",
+      username: "foodie",
       avatar: "https://i.pravatar.cc/150?img=5",
       verified: true,
     },
@@ -120,8 +120,8 @@ export const samplePosts: PostData[] = [
   {
     id: "6",
     author: {
-      name: "Lisa Chen",
-      username: "traveler_lisa",
+      name: "Traveler",
+      username: "traveler",
       avatar: "https://i.pravatar.cc/150?img=6",
     },
     content: {
