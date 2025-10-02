@@ -3,7 +3,6 @@ import {
   ThemeProvider,
   createTheme,
   CssBaseline,
-  Container,
   Typography,
   Box,
 } from "@mui/material"
@@ -15,8 +14,9 @@ import BottomNavigation, {
   UserIcon,
   SettingsIcon,
 } from "./components/BottomNavigation"
-import Post, { type PostData } from "./components/Post"
+import { type PostData } from "./components/Post"
 import ActivityProfile from "./components/ActivityProfile"
+import Moments from "./components/Moments"
 import { samplePosts } from "./data/samplePosts"
 
 // Create Material UI theme
@@ -44,16 +44,16 @@ function App() {
       onClick: () => setCurrentPage("home"),
     },
     {
-      id: "search",
-      label: "Search",
-      icon: <SearchIcon />,
-      onClick: () => setCurrentPage("search"),
-    },
-    {
       id: "favorites",
-      label: "Favorites",
+      label: "Chats",
       icon: <HeartIcon />,
       onClick: () => setCurrentPage("favorites"),
+    },
+    {
+      id: "moments",
+      label: "Moments",
+      icon: <SearchIcon />,
+      onClick: () => setCurrentPage("moments"),
     },
     {
       id: "profile",
@@ -61,29 +61,7 @@ function App() {
       icon: <UserIcon />,
       onClick: () => setCurrentPage("profile"),
     },
-    {
-      id: "settings",
-      label: "Settings",
-      icon: <SettingsIcon />,
-      onClick: () => setCurrentPage("settings"),
-    },
   ]
-
-  const handleLike = (postId: string) => {
-    console.log("Liked post:", postId)
-  }
-
-  const handleComment = (postId: string) => {
-    console.log("Comment on post:", postId)
-  }
-
-  const handleShare = (postId: string) => {
-    console.log("Share post:", postId)
-  }
-
-  const handleSave = (postId: string) => {
-    console.log("Save post:", postId)
-  }
 
   const handleAuthorClick = (username: string) => {
     const author = posts.find(
@@ -108,16 +86,28 @@ function App() {
         <div className="flex-1 pb-20">
           {currentPage === "home" && (
             <Box sx={{ py: 2 }}>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                {posts.map((post) => (
-                  <Post
-                    key={post.id}
-                    post={post}
-                    onAuthorClick={handleAuthorClick}
-                  />
-                ))}
-              </Box>
+              <Typography
+                variant="h4"
+                component="h1"
+                gutterBottom
+                align="center"
+                sx={{ px: 2 }}
+              >
+                Welcome
+              </Typography>
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                align="center"
+                sx={{ px: 2 }}
+              >
+                Check out the Moments tab to see posts from your network!
+              </Typography>
             </Box>
+          )}
+
+          {currentPage === "moments" && (
+            <Moments posts={posts} onAuthorClick={handleAuthorClick} />
           )}
 
           {currentPage === "search" && (
@@ -151,7 +141,7 @@ function App() {
                 align="center"
                 sx={{ px: 2 }}
               >
-                Favorites
+                Chats
               </Typography>
               <Typography
                 variant="body1"
@@ -159,7 +149,7 @@ function App() {
                 align="center"
                 sx={{ px: 2 }}
               >
-                Your saved posts will appear here...
+                Your conversations will appear here...
               </Typography>
             </Box>
           )}

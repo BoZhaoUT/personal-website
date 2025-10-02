@@ -55,7 +55,6 @@ export default function BottomNavigation({
         left: 0,
         right: 0,
         zIndex: 1000,
-        display: { xs: "block", md: "none" }, // Hide on desktop
       }}
       className={className}
     >

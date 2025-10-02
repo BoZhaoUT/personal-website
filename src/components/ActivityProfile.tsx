@@ -204,58 +204,6 @@ const ActivityProfile = ({ open, onClose, author }: ActivityProfileProps) => {
         </Box>
 
         {/* Bottom Actions */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-around",
-            mt: 4,
-            pt: 3,
-            borderTop: "1px solid #333",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 1,
-              cursor: "pointer",
-            }}
-          >
-            <ChatIcon sx={{ color: "#6b8ca8", fontSize: 28 }} />
-            <Typography sx={{ color: "#6b8ca8", fontSize: "0.85rem" }}>
-              Messages
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 1,
-              cursor: "pointer",
-            }}
-          >
-            <CallIcon sx={{ color: "#6b8ca8", fontSize: 28 }} />
-            <Typography sx={{ color: "#6b8ca8", fontSize: "0.85rem" }}>
-              Voice Call
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 1,
-              cursor: "pointer",
-            }}
-          >
-            <VideoIcon sx={{ color: "#6b8ca8", fontSize: 28 }} />
-            <Typography sx={{ color: "#6b8ca8", fontSize: "0.85rem" }}>
-              Video Call
-            </Typography>
-          </Box>
-        </Box>
       </Box>
     </Dialog>
   )
