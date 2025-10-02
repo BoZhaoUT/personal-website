@@ -1,20 +1,13 @@
-import {
-  Dialog,
-  Box,
-  Typography,
-  Avatar,
-  IconButton,
-  Button,
-} from "@mui/material"
+import { Dialog, Box, Typography, Avatar, IconButton } from "@mui/material"
 import {
   MoreHoriz as MoreIcon,
-  Person as PersonIcon,
   Chat as ChatIcon,
   Call as CallIcon,
   Videocam as VideoIcon,
   PlayCircle as PlayIcon,
 } from "@mui/icons-material"
 import { sampleActivities } from "../data/sampleActivities"
+import { samplePosts } from "../data/samplePosts"
 
 interface ActivityProfileProps {
   open: boolean
@@ -28,17 +21,61 @@ interface ActivityProfileProps {
 }
 
 const ActivityProfile = ({ open, onClose, author }: ActivityProfileProps) => {
-  // Get the primary activity (most posts)
-  const primaryActivity = sampleActivities.reduce((prev, current) =>
-    prev.posts > current.posts ? prev : current
-  )
+  // Get latest 4 posts from this author
+  const authorPosts = samplePosts
+    .filter((post) => post.author.username === author.username)
+    .sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    )
+    .slice(0, 4)
 
-  const momentImages = [
-    "https://picsum.photos/200/200?random=1",
-    "https://picsum.photos/200/200?random=2",
-    "https://picsum.photos/200/200?random=3",
-    "https://picsum.photos/200/200?random=4",
-  ]
+  // Get activity type based on author's name
+  const getActivityByAuthor = () => {
+    const authorName = author.name.toLowerCase()
+
+    if (authorName.includes("foodie")) {
+      return (
+        sampleActivities.find((activity) => activity.id === "foodie") ||
+        sampleActivities[0]
+      )
+    } else if (authorName.includes("traveler")) {
+      return (
+        sampleActivities.find((activity) => activity.id === "travel") ||
+        sampleActivities[0]
+      )
+    } else if (authorName.includes("hobbyist")) {
+      return (
+        sampleActivities.find((activity) => activity.id === "hobby") ||
+        sampleActivities[0]
+      )
+    }
+
+    // Default fallback
+    return sampleActivities[0]
+  }
+
+  const primaryActivity = getActivityByAuthor()
+
+  // Extract media from posts (first image or video thumbnail)
+  const momentImages = authorPosts
+    .map((post) => {
+      if (post.content.images && post.content.images.length > 0) {
+        return {
+          src: post.content.images[0],
+          isVideo: false,
+          postId: post.id,
+        }
+      } else if (post.content.video) {
+        return {
+          src: post.content.video,
+          isVideo: true,
+          postId: post.id,
+        }
+      }
+      return null
+    })
+    .filter(Boolean)
 
   return (
     <Dialog
@@ -96,9 +133,9 @@ const ActivityProfile = ({ open, onClose, author }: ActivityProfileProps) => {
         >
           <Typography sx={{ color: "#999" }}>Moments</Typography>
           <Box sx={{ display: "flex", gap: 1 }}>
-            {momentImages.map((img, idx) => (
+            {momentImages.map((moment, idx) => (
               <Box
-                key={idx}
+                key={moment?.postId || idx}
                 sx={{
                   width: 48,
                   height: 48,
@@ -107,12 +144,28 @@ const ActivityProfile = ({ open, onClose, author }: ActivityProfileProps) => {
                   position: "relative",
                 }}
               >
-                <img
-                  src={img}
-                  alt={`Moment ${idx + 1}`}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-                {idx === 2 && (
+                {moment?.isVideo ? (
+                  <video
+                    src={moment.src}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                    muted
+                  />
+                ) : (
+                  <img
+                    src={moment?.src}
+                    alt={`Moment ${idx + 1}`}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                )}
+                {moment?.isVideo && (
                   <PlayIcon
                     sx={{
                       position: "absolute",
@@ -126,6 +179,27 @@ const ActivityProfile = ({ open, onClose, author }: ActivityProfileProps) => {
                 )}
               </Box>
             ))}
+            {/* Fill remaining slots if less than 4 moments */}
+            {Array.from({ length: Math.max(0, 4 - momentImages.length) }).map(
+              (_, idx) => (
+                <Box
+                  key={`empty-${idx}`}
+                  sx={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 1,
+                    border: "1px solid #333",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography sx={{ color: "#666", fontSize: "0.75rem" }}>
+                    {momentImages.length + idx + 1}
+                  </Typography>
+                </Box>
+              )
+            )}
           </Box>
         </Box>
 

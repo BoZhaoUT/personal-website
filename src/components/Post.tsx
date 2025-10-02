@@ -74,9 +74,11 @@ const Post = ({ post, onAuthorClick }: PostProps) => {
                   mb: 0.5,
                   textAlign: "left",
                   color: "#6B8DB8",
+                  cursor: "pointer",
                 }}
+                onClick={() => onAuthorClick?.(post.author.username)}
               >
-                Post Content
+                {post.author.name}
               </Typography>
               <Typography
                 variant="body2"
