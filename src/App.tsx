@@ -12,12 +12,13 @@ import BottomNavigation, {
   SearchIcon,
   HeartIcon,
   UserIcon,
-  SettingsIcon,
 } from "./components/BottomNavigation"
 import { type PostData } from "./components/Post"
 import ActivityProfile from "./components/ActivityProfile"
 import Moments from "./components/Moments"
+import ChatList from "./components/ChatList"
 import { samplePosts } from "./data/samplePosts"
+import { sampleChats } from "./data/sampleChats"
 
 // Create Material UI theme
 const theme = createTheme({
@@ -78,6 +79,11 @@ function App() {
     setSelectedAuthor(null)
   }
 
+  const handleChatClick = (chatId: string) => {
+    console.log("Chat clicked:", chatId)
+    // TODO: Navigate to chat conversation
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -133,25 +139,7 @@ function App() {
           )}
 
           {currentPage === "favorites" && (
-            <Box sx={{ py: 2 }}>
-              <Typography
-                variant="h4"
-                component="h1"
-                gutterBottom
-                align="center"
-                sx={{ px: 2 }}
-              >
-                Chats
-              </Typography>
-              <Typography
-                variant="body1"
-                color="text.secondary"
-                align="center"
-                sx={{ px: 2 }}
-              >
-                Your conversations will appear here...
-              </Typography>
-            </Box>
+            <ChatList chats={sampleChats} onChatClick={handleChatClick} />
           )}
 
           {currentPage === "profile" && (

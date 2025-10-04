@@ -5,6 +5,13 @@
   text-align: center;
 }
 
+/* Full width for chat list */
+.full-width {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
