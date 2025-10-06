@@ -39,16 +39,16 @@ function App() {
 
   const navigationItems = [
     {
-      id: "home",
-      label: "Home",
-      icon: <HomeIcon />,
-      onClick: () => setCurrentPage("home"),
-    },
-    {
       id: "favorites",
       label: "Chats",
       icon: <HeartIcon />,
       onClick: () => setCurrentPage("favorites"),
+    },
+    {
+      id: "home",
+      label: "Home",
+      icon: <HomeIcon />,
+      onClick: () => setCurrentPage("home"),
     },
     {
       id: "moments",
